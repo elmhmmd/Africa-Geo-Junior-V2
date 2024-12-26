@@ -1,5 +1,4 @@
 <?php
-//I don't know if hashing logic has something to do with this class but if it does remember to implement it
 //remember to import needed classes
 //remember to add methods as needed
 class Auth {
@@ -23,14 +22,14 @@ class Auth {
     }
 
     public function register($username, $password) {
-    // Check if username already exists
+   
     $stmt = $this->db->prepare("SELECT id FROM users WHERE username = :username");
     $stmt->execute(['username' => $username]);
+
     if ($stmt->fetch()) {
-        return false; // Username already taken
+        return false; 
     }
-    
-    // Hash password and create user
+
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
     $stmt = $this->db->prepare("INSERT INTO users (username, password, is_admin) VALUES (:username, :password, 0)");
     return $stmt->execute([
