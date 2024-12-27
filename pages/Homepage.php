@@ -29,7 +29,7 @@
 </head>
 <body class="bg-[#F4A460]">
     <!-- Navbar -->
-    <nav class="bg-[#8B4513]/90 fixed w-full z-50">
+    <nav class="bg-[#8B4513] fixed w-full z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center">

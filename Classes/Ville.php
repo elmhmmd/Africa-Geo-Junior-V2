@@ -5,14 +5,14 @@ class Ville {
     private $nom;
     private $description;
     private $type;
-    private $pays_id;
+    private $id_pays;
 
-    public function __construct($id = null, $nom = '', $description = '', $type = '', $pays_id = null) {
+    public function __construct($id = null, $nom = '', $description = '', $type = '', $id_pays = null) {
         $this->id = $id;
         $this->nom = $nom;
         $this->description = $description;
         $this->type = $type;
-        $this->pays_id = $pays_id;
+        $this->id_pays = $id_pays;
     }
 
     // Getters
@@ -20,35 +20,35 @@ class Ville {
     public function getNom() { return $this->nom; }
     public function getDescription() { return $this->description; }
     public function getType() { return $this->type; }
-    public function getPaysId() { return $this->pays_id; }
+    public function getPaysId() { return $this->id_pays; }
 
     // Setters
     public function setNom($nom) { $this->nom = $nom; }
     public function setDescription($description) { $this->description = $description; }
     public function setType($type) { $this->type = $type; }
-    public function setPaysId($pays_id) { $this->pays_id = $pays_id; }
+    public function setPaysId($id_pays) { $this->id_pays = $id_pays; }
 
     // CRUD Operations
-    public static function create($nom, $description, $type, $pays_id) {
+    public static function create($nom, $description, $type, $id_pays) {
         $db = Database::getInstance()->getConnection();
-        $sql = "INSERT INTO villes (nom, description, type, pays_id) VALUES (:nom, :description, :type, :pays_id)";
+        $sql = "INSERT INTO villes (nom, description, type, id_pays) VALUES (:nom, :description, :type, :id_pays)";
         $stmt = $db->prepare($sql);
         $stmt->execute([
             ':nom' => $nom,
             ':description' => $description,
             ':type' => $type,
-            ':pays_id' => $pays_id
+            ':id_pays' => $id_pays
         ]);
-        return new self($db->lastInsertId(), $nom, $description, $type, $pays_id);
+        return new self($db->lastInsertId(), $nom, $description, $type, $id_pays);
     }
 
     public static function getById($id) {
         $db = Database::getInstance()->getConnection();
-        $sql = "SELECT * FROM villes WHERE id = :id";
+        $sql = "SELECT * FROM villes WHERE id_ville = :id";
         $stmt = $db->prepare($sql);
         $stmt->execute([':id' => $id]);
         $data = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $data ? new self($data['id'], $data['nom'], $data['description'], $data['type'], $data['pays_id']) : null;
+        return $data ? new self($data['id_ville'], $data['nom'], $data['description'], $data['type'], $data['id_pays']) : null;
     }
 
     public static function getAll() {
@@ -58,39 +58,39 @@ class Ville {
         $stmt->execute();
         $villes = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $villes[] = new self($data['id'], $data['nom'], $data['description'], $data['type'], $data['pays_id']);
+            $villes[] = new self($data['id_ville'], $data['nom'], $data['description'], $data['type'], $data['id_pays']);
         }
         return $villes;
     }
 
     public function update() {
         $db = Database::getInstance()->getConnection();
-        $sql = "UPDATE villes SET nom = :nom, description = :description, type = :type, pays_id = :pays_id WHERE id = :id";
+        $sql = "UPDATE villes SET nom = :nom, description = :description, type = :type, id_pays = :id_pays WHERE id_ville = :id";
         $stmt = $db->prepare($sql);
         return $stmt->execute([
             ':id' => $this->id,
             ':nom' => $this->nom,
             ':description' => $this->description,
             ':type' => $this->type,
-            ':pays_id' => $this->pays_id
+            ':id_pays' => $this->id_pays
         ]);
     }
 
     public function delete() {
         $db = Database::getInstance()->getConnection();
-        $sql = "DELETE FROM villes WHERE id = :id";
+        $sql = "DELETE FROM villes WHERE id_ville = :id";
         $stmt = $db->prepare($sql);
         return $stmt->execute([':id' => $this->id]);
     }
 
-    public static function getByPaysId($pays_id) {
+    public static function getByPaysId($id_pays) {
         $db = Database::getInstance()->getConnection();
-        $sql = "SELECT * FROM villes WHERE pays_id = :pays_id";
+        $sql = "SELECT * FROM villes WHERE id_pays = :id_pays";
         $stmt = $db->prepare($sql);
-        $stmt->execute([':pays_id' => $pays_id]);
+        $stmt->execute([':id_pays' => $id_pays]);
         $villes = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $villes[] = new self($data['id'], $data['nom'], $data['description'], $data['type'], $data['pays_id']);
+            $villes[] = new self($data['id_ville'], $data['nom'], $data['description'], $data['type'], $data['id_pays']);
         }
         return $villes;
     }
@@ -102,7 +102,7 @@ class Ville {
         $stmt->execute([':type' => $type]);
         $villes = [];
         while ($data = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            $villes[] = new self($data['id'], $data['nom'], $data['description'], $data['type'], $data['pays_id']);
+            $villes[] = new self($data['id_ville'], $data['nom'], $data['description'], $data['type'], $data['id_pays']);
         }
         return $villes;
     }
